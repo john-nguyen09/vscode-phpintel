@@ -2,6 +2,7 @@
   "name": "vscode-phpintel",
   "version": "0.0.1",
   "description": "VSCode extension for phpintel",
+  "repository": "https://github.com/john-nguyen09/vscode-phpintel",
   "main": "lib/extension.js",
   "publisher": "JohnNguyen",
   "engines": {

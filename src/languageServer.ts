@@ -1,11 +1,12 @@
 import { LanguageClient, LanguageClientOptions, ServerOptions } from "vscode-languageclient";
 import * as url from "url";
-import { Uri } from "vscode";
-import { exeFile } from "./config";
+import { Uri, ExtensionContext } from "vscode";
+import { buildConfig } from "./config";
 
 let client: LanguageClient;
 
-export function startServer() {
+export function startServer(context: ExtensionContext) {
+    const {exeFile} = buildConfig(context);
     let serverOptions: ServerOptions = {
         command: exeFile,
     };

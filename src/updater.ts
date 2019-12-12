@@ -6,11 +6,12 @@ import * as request from 'request';
 import * as unzipper from 'unzipper';
 import { gt } from 'semver';
 import * as tar from 'tar-stream';
-import { headers, releaseEndpoint, isWindows, exeFile } from './config';
+import { ExtensionContext } from 'vscode';
+import { buildConfig, Config } from './config';
 
 const fileExists = promisify(fs.exists);
 
-function getContent(link: string): Promise<string> {
+function getContent({headers}: Config, link: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
         request
             .get(link, {
@@ -24,8 +25,9 @@ function getContent(link: string): Promise<string> {
     });
 }
 
-async function getLatestRelease(): Promise<any> {
-    const body = await getContent(releaseEndpoint);
+async function getLatestRelease(config: Config): Promise<any> {
+    const {releaseEndpoint} = config;
+    const body = await getContent(config, releaseEndpoint);
     const data = JSON.parse(body);
     data.version = data.tag_name;
     if (data.version.startsWith('v')) {
@@ -34,7 +36,7 @@ async function getLatestRelease(): Promise<any> {
     return data;
 }
 
-async function downloadFile(link: string, target: fs.PathLike): Promise<void> {
+async function downloadFile(isWindows: boolean, link: string, target: fs.PathLike): Promise<void> {
     return new Promise<void>((resolve, reject) => {
         const req = request.get(link);
 
@@ -69,29 +71,30 @@ async function downloadFile(link: string, target: fs.PathLike): Promise<void> {
     });
 }
 
-export async function installRelease(release: any) {
+export async function installRelease({exeFile, isWindows}: Config, release: any) {
     const fileName = getFileName(release.version);
 
     for (const asset of release.assets) {
         if (fileName == asset.name) {
-            await downloadFile(asset.browser_download_url, exeFile);
+            await downloadFile(isWindows, asset.browser_download_url, exeFile);
             break;
         }
     }
 }
 
-export async function checkForUpdate(): Promise<void> {
-    const currentVersion = await getCurrentVersion();
-    const latestRelease = await getLatestRelease();
+export async function checkForUpdate(context: ExtensionContext): Promise<void> {
+    const config = buildConfig(context);
+    const currentVersion = await getCurrentVersion(config);
+    const latestRelease = await getLatestRelease(config);
     console.log(`Current version: ${currentVersion}`);
     console.log(`Latest version: ${latestRelease.version}`);
     if (currentVersion == '' || gt(latestRelease.version, currentVersion)) {
         console.log(`Installing ${latestRelease.version}`);
-        await installRelease(latestRelease);
+        await installRelease(config, latestRelease);
     }
 }
 
-async function getCurrentVersion(): Promise<string> {
+async function getCurrentVersion({exeFile}: Config): Promise<string> {
     return fileExists(exeFile)
         .then((exists) => {
             if (!exists) {

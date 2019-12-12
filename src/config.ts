@@ -1,8 +1,32 @@
 import * as path from 'path';
+import { ExtensionContext } from "vscode";
+const homedir = require('os').homedir();
+import * as fs from 'fs';
 
-export const releaseEndpoint = 'https://api.github.com/repos/john-nguyen09/phpintel/releases/latest';
-export const headers = {
+const releaseEndpoint = 'https://api.github.com/repos/john-nguyen09/phpintel/releases/latest';
+const headers = {
     'User-Agent': 'Mozilla/5.0',
 };
-export const isWindows = process.platform == 'win32';
-export const exeFile = path.join(__dirname, '..', 'bin', isWindows ? 'phpintel.exe' : 'phpintel');
+const isWindows = process.platform == 'win32';
+
+export type Config = {
+    releaseEndpoint: string;
+    headers: {
+        'User-Agent': string;
+    };
+    isWindows: boolean;
+    exeFile: string;
+}
+
+export function buildConfig(context: ExtensionContext): Config {
+    const appPath = path.join(homedir, '.phpintel');
+    if (!fs.existsSync(path.join(appPath, 'bin'))) {
+        fs.mkdirSync(path.join(appPath, 'bin'), { recursive: true } as any);
+    }
+    return {
+        releaseEndpoint,
+        headers,
+        isWindows,
+        exeFile: path.resolve(appPath, 'bin', isWindows ? 'phpintel.exe' : 'phpintel'),
+    }
+}

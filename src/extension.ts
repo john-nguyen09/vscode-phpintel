@@ -3,8 +3,8 @@ import { startServer, stopServer } from "./languageServer";
 import { checkForUpdate } from "./updater";
 
 export async function activate(context: ExtensionContext): Promise<void> {
-    await checkForUpdate();
-    startServer();
+    await checkForUpdate(context);
+    startServer(context);
 }
 
 export function deactivate(): Thenable<void> | undefined {

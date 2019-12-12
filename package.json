@@ -9,6 +9,8 @@
     "vscode": "^1.26.0"
   },
   "scripts": {
+    "package": "npm run bundle && vsce package",
+    "bundle": "rimraf lib && webpack",
     "build": "tsc",
     "update-vscode": "vscode-install",
     "postinstall": "vscode-install"
@@ -40,7 +42,11 @@
     "@types/semver": "^6.2.0",
     "@types/tar-stream": "^1.6.1",
     "@types/unzipper": "^0.10.1",
+    "rimraf": "^3.0.0",
+    "ts-loader": "^6.2.1",
     "typescript": "^3.0.1",
-    "vscode": "^1.1.36"
+    "vscode": "^1.1.36",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
   }
 }

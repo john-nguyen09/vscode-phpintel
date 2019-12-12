@@ -1,0 +1,45 @@
+{
+  "name": "vscode-phpintel",
+  "version": "0.0.1",
+  "description": "VSCode extension for phpintel",
+  "main": "lib/extension.js",
+  "publisher": "JohnNguyen",
+  "engines": {
+    "vscode": "^1.26.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "update-vscode": "vscode-install",
+    "postinstall": "vscode-install"
+  },
+  "author": "John Nguyen",
+  "license": "MIT",
+  "dependencies": {
+    "mz": "^2.7.0",
+    "request": "^2.88.0",
+    "semver": "^6.3.0",
+    "tar-stream": "^2.1.0",
+    "unzipper": "^0.10.5",
+    "vscode-languageclient": "^5.0.1"
+  },
+  "activationEvents": [
+    "onLanguage:php",
+    "workspaceContains:**/*.php"
+  ],
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "phpintel"
+    }
+  },
+  "devDependencies": {
+    "@types/mz": "0.0.32",
+    "@types/node": "^10.7.1",
+    "@types/request": "^2.48.3",
+    "@types/semver": "^6.2.0",
+    "@types/tar-stream": "^1.6.1",
+    "@types/unzipper": "^0.10.1",
+    "typescript": "^3.0.1",
+    "vscode": "^1.1.36"
+  }
+}

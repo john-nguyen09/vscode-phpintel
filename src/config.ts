@@ -8,6 +8,7 @@ const headers = {
     'User-Agent': 'Mozilla/5.0',
 };
 const isWindows = process.platform == 'win32';
+const appPath = path.join(homedir, '.phpintel');
 
 export type Config = {
     releaseEndpoint: string;
@@ -16,10 +17,10 @@ export type Config = {
     };
     isWindows: boolean;
     exeFile: string;
+    appPath: string;
 }
 
 export function buildConfig(context: ExtensionContext): Config {
-    const appPath = path.join(homedir, '.phpintel');
     if (!fs.existsSync(path.join(appPath, 'bin'))) {
         fs.mkdirSync(path.join(appPath, 'bin'), { recursive: true } as any);
     }
@@ -28,5 +29,6 @@ export function buildConfig(context: ExtensionContext): Config {
         headers,
         isWindows,
         exeFile: path.resolve(appPath, 'bin', isWindows ? 'phpintel.exe' : 'phpintel'),
+        appPath,
     }
 }

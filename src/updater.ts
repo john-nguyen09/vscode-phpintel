@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import { promisify } from 'util';
 import * as request from 'request';
 import * as unzipper from 'unzipper';
-import { gt } from 'semver';
+import { gt, valid } from 'semver';
 import * as tar from 'tar-stream';
 import { ExtensionContext } from 'vscode';
 import { buildConfig, Config } from './config';
@@ -88,6 +88,9 @@ export async function checkForUpdate(context: ExtensionContext): Promise<void> {
     const latestRelease = await getLatestRelease(config);
     console.log(`Current version: ${currentVersion}`);
     console.log(`Latest version: ${latestRelease.version}`);
+    if (!valid(currentVersion)) {
+        return;
+    }
     if (currentVersion == '' || gt(latestRelease.version, currentVersion)) {
         console.log(`Installing ${latestRelease.version}`);
         await installRelease(config, latestRelease);

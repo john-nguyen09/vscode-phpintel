@@ -30,8 +30,11 @@ export function startServer(context: ExtensionContext) {
             updateDecorations(editor, clientOptions)
         }
     });
-    workspace.onDidChangeTextDocument(_ => {
+    workspace.onDidChangeTextDocument(e => {
         if (activeEditor !== undefined) {
+            if (activeEditor.document.uri !== e.document.uri) {
+                return;
+            }
             updateDecorations(activeEditor, clientOptions);
         }
     });

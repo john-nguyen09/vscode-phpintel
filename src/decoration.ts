@@ -10,9 +10,9 @@ export namespace Decoration {
             renderOptions: {
                 before: {
                     color: '#6C706F',
-                    backgroundColor: '#DEDEDE',
+                    // backgroundColor: '#DEDEDE',
                     contentText: text,
-                    margin: "0 2px 0 0; padding: 3px; border-radius: 4px",
+                    margin: "0 2px 0 0; padding: 3px",
                     fontWeight: `400; font-size: ${fontSize}px`,
                 },
             },

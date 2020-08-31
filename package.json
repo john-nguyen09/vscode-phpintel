@@ -19,10 +19,10 @@
   "license": "MIT",
   "dependencies": {
     "mz": "^2.7.0",
-    "request": "^2.88.0",
+    "request": "^2.88.2",
     "semver": "^6.3.0",
-    "tar-stream": "^2.1.0",
-    "unzipper": "^0.10.5",
+    "tar-stream": "^2.1.3",
+    "unzipper": "^0.10.11",
     "vscode-languageclient": "^6.1.3"
   },
   "activationEvents": [
@@ -32,21 +32,40 @@
   "contributes": {
     "configuration": {
       "type": "object",
-      "title": "phpintel"
+      "title": "phpintel",
+      "properties": {
+        "phpintel.showInlineSignatures": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show inline signatures"
+        },
+        "phpintel.trace.server": {
+          "scope": "window",
+          "type": "string",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "default": "off",
+          "description": "Traces the communication between VS Code and the language server."
+        }
+      }
     }
   },
   "devDependencies": {
     "@types/mz": "0.0.32",
-    "@types/node": "^10.7.1",
-    "@types/request": "^2.48.3",
-    "@types/semver": "^6.2.0",
-    "@types/tar-stream": "^1.6.1",
-    "@types/unzipper": "^0.10.1",
-    "rimraf": "^3.0.0",
-    "ts-loader": "^6.2.1",
-    "typescript": "^3.0.1",
-    "vscode": "^1.1.36",
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10"
+    "@types/node": "^10.17.28",
+    "@types/request": "^2.48.5",
+    "@types/semver": "^6.2.1",
+    "@types/tar-stream": "^1.6.2",
+    "@types/unzipper": "^0.10.3",
+    "rimraf": "^3.0.2",
+    "ts-loader": "^6.2.2",
+    "typescript": "^3.9.7",
+    "vsce": "^1.79.4",
+    "vscode": "^1.1.37",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
   }
 }

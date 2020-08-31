@@ -77,6 +77,11 @@ const updateDecorations = debounce<(e: TextEditor, clientOptions: LanguageClient
     if (!clientReady) {
         return;
     }
+    const workspaceConfiguration = workspace.getConfiguration('phpintel');
+    if (!workspaceConfiguration.has('showInlineSignatures')
+        || !workspaceConfiguration.get('showInlineSignatures')) {
+        return;
+    }
     let uriString = editor.document.uri.toString();
     if (clientOptions.uriConverters) {
         uriString = clientOptions.uriConverters.code2Protocol(editor.document.uri);

@@ -1,4 +1,4 @@
-import { LanguageClient, LanguageClientOptions, ServerOptions, TextDocumentIdentifier } from "vscode-languageclient";
+import { LanguageClient, LanguageClientOptions, ServerOptions, TextDocumentIdentifier } from "vscode-languageclient/node";
 import * as url from "url";
 import { Uri, ExtensionContext, TextEdit, window, DecorationOptions, TextEditor, workspace } from "vscode";
 import { buildConfig } from "./config";

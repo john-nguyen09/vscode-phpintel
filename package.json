@@ -1,6 +1,6 @@
 {
   "name": "vscode-phpintel",
-  "version": "0.0.12",
+  "version": "0.0.1",
   "description": "VSCode extension for phpintel",
   "repository": "https://github.com/john-nguyen09/vscode-phpintel",
   "main": "lib/extension.js",
@@ -34,6 +34,11 @@
       "type": "object",
       "title": "phpintel",
       "properties": {
+        "phpintel.appPath": {
+          "type": "string",
+          "default": "",
+          "description": "The path that the app uses to execute phpintel server file (bin/phpintel) and store its data. If this config is empty by default the extension uses `$HOME/.phpintel` as the app path."
+        },
         "phpintel.showInlineSignatures": {
           "type": "boolean",
           "default": true,

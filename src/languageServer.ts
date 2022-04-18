@@ -24,6 +24,7 @@ export function startServer(context: ExtensionContext) {
             protocol2Code: str => Uri.parse(str)
         },
     }
+    activeEditor = window.activeTextEditor;
     window.onDidChangeActiveTextEditor(editor => {
         activeEditor = editor;
         if (editor !== undefined) {
@@ -35,6 +36,14 @@ export function startServer(context: ExtensionContext) {
             if (activeEditor.document.uri !== e.document.uri) {
                 return;
             }
+            updateDecorations(activeEditor, clientOptions);
+        }
+    });
+    workspace.onDidChangeConfiguration(e => {
+        if (!e.affectsConfiguration('phpintel.showInlineSignatures')) {
+            return;
+        }
+        if (activeEditor !== undefined) {
             updateDecorations(activeEditor, clientOptions);
         }
     });
@@ -56,6 +65,7 @@ export function startServer(context: ExtensionContext) {
 
 function debounce<F extends Function>(func: F, wait: number): F {
     let timeoutID: any;
+    let lastExecTime = 0;
 
     if (!Number.isInteger(wait)) {
         console.warn("Called debounce without a valid number")
@@ -66,7 +76,14 @@ function debounce<F extends Function>(func: F, wait: number): F {
     return <any>function (this: any, ...args: any[]) {
         clearTimeout(timeoutID);
         const context = this;
+        const now = Date.now();
 
+        if ((now - lastExecTime) >= wait) {
+            func.apply(context, args);
+            lastExecTime = now;
+            return;
+        }
+        lastExecTime = now;
         timeoutID = setTimeout(function () {
             func.apply(context, args);
         }, wait);
@@ -80,6 +97,7 @@ const updateDecorations = debounce<(e: TextEditor, clientOptions: LanguageClient
     const workspaceConfiguration = workspace.getConfiguration('phpintel');
     if (!workspaceConfiguration.has('showInlineSignatures')
         || !workspaceConfiguration.get('showInlineSignatures')) {
+        editor.setDecorations(hintDecorationType, []);
         return;
     }
     let uriString = editor.document.uri.toString();

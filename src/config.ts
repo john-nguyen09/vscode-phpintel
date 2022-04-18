@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { ExtensionContext } from "vscode";
+import { ExtensionContext, workspace } from "vscode";
 const homedir = require('os').homedir();
 import * as fs from 'fs';
 
@@ -8,7 +8,7 @@ const headers = {
     'User-Agent': 'Mozilla/5.0',
 };
 const isWindows = process.platform == 'win32';
-const appPath = path.join(homedir, '.phpintel');
+let appPath = path.join(homedir, '.phpintel');
 
 export type Config = {
     releaseEndpoint: string;
@@ -21,6 +21,13 @@ export type Config = {
 }
 
 export function buildConfig(context: ExtensionContext): Config {
+    const workspaceConfiguration = workspace.getConfiguration('phpintel');
+    if (workspaceConfiguration.has('appPath')) {
+        const configAppPath = workspaceConfiguration.get('appPath');
+        if (configAppPath) {
+            appPath = configAppPath as string;
+        }
+    }
     if (!fs.existsSync(path.join(appPath, 'bin'))) {
         fs.mkdirSync(path.join(appPath, 'bin'), { recursive: true } as any);
     }

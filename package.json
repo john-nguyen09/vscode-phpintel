@@ -11,8 +11,8 @@
   "scripts": {
     "vscode:prepublish": "npm run bundle",
     "package": "vsce package",
-    "bundle": "rimraf lib && webpack",
-    "build": "tsc"
+    "bundle": "rimraf lib && esbuild src/extension.ts --bundle --platform=node --target=node10.4 --external:vscode --outfile=lib/extension.js",
+    "typecheck": "tsc --noEmit"
   },
   "author": "John Nguyen",
   "license": "MIT",
@@ -65,11 +65,10 @@
     "@types/tar-stream": "^1.6.4",
     "@types/unzipper": "^0.10.5",
     "@types/vscode": "^1.52.0",
+    "esbuild": "^0.14.36",
     "rimraf": "^3.0.2",
     "ts-loader": "^6.2.2",
     "typescript": "^3.9.10",
-    "vsce": "^2.7.0",
-    "webpack": "^5.72.0",
-    "webpack-cli": "^3.3.12"
+    "vsce": "^2.7.0"
   }
 }
